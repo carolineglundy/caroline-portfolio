@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/* Prevent horizontal scroll on mobile; contain layout to viewport */
+/* scrollbar-gutter: stable reserves scrollbar space so locking scroll doesn't cause layout jump */
+html {
+  overflow-x: hidden;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
