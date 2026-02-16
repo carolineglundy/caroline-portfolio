@@ -2,7 +2,6 @@
 import { useBookRecommendations } from '../../composables/useBookRecommendations';
 
 interface BookRecContainerProps {
-  /** Optional section title override. */
   title?: string;
 }
 
@@ -82,17 +81,14 @@ const {
       </p>
     </div>
 
-    <!-- Loading state: no extra UI beyond button text; results area stays hidden until data arrives -->
     <template v-if="loading">
       <p class="sr-only" aria-live="polite">Loading recommendations.</p>
     </template>
 
-    <!-- Empty state: no results and no error (e.g. before first submit) -->
     <template v-else-if="isEmpty">
       <p class="sr-only" aria-live="polite">Enter a favorite book to see recommendations.</p>
     </template>
 
-    <!-- Results state -->
     <div
       v-else-if="hasRecommendations"
       class="max-w-2xl mx-auto px-4"

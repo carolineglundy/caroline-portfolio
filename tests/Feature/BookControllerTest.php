@@ -63,27 +63,6 @@ it('returns 400 with empty recommendations when favorite_book is empty', functio
     Http::assertNothingSent();
 });
 
-it('returns fallback books when Gemini responds with 429 quota exceeded', function () {
-    Http::fake([
-        'generativelanguage.googleapis.com/*' => Http::response(['error' => 'Quota exceeded'], 429),
-    ]);
-
-    $response = $this->postJson('/api/books/recommendations-from-favorite', [
-        'favorite_book' => 'The Martian',
-    ]);
-
-    $response->assertStatus(200)
-        ->assertJsonStructure([
-            'recommendations' => [
-                '*' => ['title', 'author'],
-            ],
-            'error',
-        ])
-        ->assertJsonCount(5, 'recommendations')
-        ->assertJsonPath('recommendations.0.title', 'Project Hail Mary')
-        ->assertJsonPath('recommendations.1.title', 'The Martian');
-});
-
 it('returns generic error message when Gemini API returns 500', function () {
     Http::fake([
         'generativelanguage.googleapis.com/*' => Http::response(['error' => 'Internal Server Error'], 500),

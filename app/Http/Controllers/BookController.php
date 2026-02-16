@@ -45,13 +45,6 @@ No markdown, no backticks, no other text.";
                 ],
             ]);
 
-            if ($response->status() === 429) {
-                return response()->json([
-                    'recommendations' => self::FALLBACK_RECOMMENDATIONS,
-                    'error' => 'Recommendation limit reached. Here are some picks to try.',
-                ], 200);
-            }
-
             if (! $response->successful()) {
                 Log::error('Gemini API error: ' . $response->status() . ' ' . $response->body());
                 return response()->json([
@@ -63,12 +56,7 @@ No markdown, no backticks, no other text.";
             $body = $response->json();
             $text = $body['candidates'][0]['content']['parts'][0]['text'] ?? '';
             $list = json_decode($text, true);
-            if (! is_array($list)) {
-                return response()->json([
-                    'recommendations' => self::FALLBACK_RECOMMENDATIONS,
-                    'error' => 'Could not parse recommendations.',
-                ], 200);
-            }
+
             $recommendations = array_values(array_filter($list, function ($item) {
                 return is_array($item) && isset($item['title']) && isset($item['author']);
             }));
